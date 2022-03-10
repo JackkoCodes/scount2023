@@ -112,7 +112,7 @@ class ViewController: UIViewController , UITextFieldDelegate{
         count = count + 1
         let time = secondsToHoursMinutesSeconds(seconds: count)
         let timeString = makeTimeString(hours: time.0, minutes: time.1, seconds: time.2)
-        climbTimerLabel.text = timeString
+        climbTimerLabel.text! = timeString
     }
     //tbh at this point i have no idea what is going on, but it works
     func secondsToHoursMinutesSeconds(seconds: Int) -> (Int, Int, Int){
@@ -129,16 +129,18 @@ class ViewController: UIViewController , UITextFieldDelegate{
         return timeString
     }
    
-    var climbStatus = ""
+    var climbStatus = "N/A"
     //changes the value of climbStatus based on position of segmented control
     @IBAction func didChangeSegClimb(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            climbStatus = "Low"
+            climbStatus = "N/A"
         } else if sender.selectedSegmentIndex == 1 {
-            climbStatus = "Mid"
+            climbStatus = "Low"
         } else if sender.selectedSegmentIndex == 2 {
-            climbStatus = "High"
+            climbStatus = "Mid"
         } else if sender.selectedSegmentIndex == 3 {
+            climbStatus = "High"
+        } else if sender.selectedSegmentIndex == 4 {
             climbStatus = "Traversal"
         }
     }
@@ -147,14 +149,16 @@ class ViewController: UIViewController , UITextFieldDelegate{
     //changes the value of defenseVal based on position of segmented control
     @IBAction func didChangeSegDef(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
-            defenseVal = 1
+            defenseVal = 0
         } else if sender.selectedSegmentIndex == 1 {
-            defenseVal = 2
+            defenseVal = 1
         } else if sender.selectedSegmentIndex == 2 {
-            defenseVal = 3
+            defenseVal = 2
         } else if sender.selectedSegmentIndex == 3 {
-            defenseVal = 4
+            defenseVal = 3
         } else if sender.selectedSegmentIndex == 4 {
+            defenseVal = 4
+        } else if sender.selectedSegmentIndex == 5 {
             defenseVal = 5
         }
     }
@@ -245,7 +249,7 @@ class ViewController: UIViewController , UITextFieldDelegate{
         commentText = commentText.replacingOccurrences(of: ",", with: "&#44;")
         commentText = commentText.replacingOccurrences(of: "'|’", with: "&#39;", options: .regularExpression)
         
-        let okayChars = Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+=-?().!_;&#")
+        let okayChars = Set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,./!? ")
         commentText = commentText.filter {okayChars.contains($0) }
     
         var matchText = matchNum?.text ?? ""
@@ -258,7 +262,7 @@ class ViewController: UIViewController , UITextFieldDelegate{
         scoutText = scoutText.trimmingCharacters(in: .whitespacesAndNewlines)
         
         //dumps all variables into one string in order to generate a QR code
-        var myData = "\(teamText),\(matchText),\(disabledSwitch.isOn),\(String(describing: climbTimerLabel.text)),\(climbStatus),\(autonTarmac.isOn),\(String(format: "%.0f",autonUpperVal)),\(String(format: "%.0f",autonLowerVal)),\(telePickup.isOn),\(defenseVal),\(String(format: "%.0f",teleUpperVal)),\(String(format: "%.0f",teleLowerVal)),\(scoutText),\(commentText)"
+        var myData = "\(teamText),\(matchText),\(disabledSwitch.isOn),\(String(describing: climbTimerLabel.text)),\(climbStatus),\(autonTarmac.isOn),\(String(format: "%.0f",autonUpperVal)),\(String(format: "%.0f",autonLowerVal)),\(defenseVal),\(String(format: "%.0f",teleUpperVal)),\(String(format: "%.0f",teleLowerVal)),\(scoutText),\(commentText)"
         
         // change uuid if data changed and append uuid
         if(myData != prevData){
